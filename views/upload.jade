@@ -1,0 +1,99 @@
+extends layout
+
+block content
+    .card.upload.mx-auto
+        .card-header 文件上传
+        .card-body
+            form
+                .form-group
+                    label.form-control-label(for='tag') 分类
+                    select.form-control(name='tag', class='fields', id='tag')
+                        option(value="AndLink")  AndLink
+                        option(value="AppCore")  AppCore
+                .form-group
+                    label.form-control-label(for='desc') 描述
+                    textarea.form-control(name='desc', class='fields', rows='6', id='desc')
+                .form-group
+                    .row
+                        .col-8
+                            .progress
+                                .progress-bar.progress-bar-striped(role='progressbar')
+                        .col-4
+                            a.btn.btn-outline-success.upload-btn(role='button', href='#') 上传文件
+                input.d-none#upload-input(type='file', name='uploads[]')
+        if session.user.token === 'master88'
+            .card-footer
+                ul.nav
+                    li.nav-item
+                        a.nav-link(href=PROJECT_NAME + '/file/list') 查看文件
+block scripts
+    script(type='text/javascript').
+        var $uploadBtn = $('.upload-btn'),
+            $uploadInput = $('#upload-input'),
+            progressClass = 'progress-bar-animated',
+            $progressbar = $('.progress-bar');
+
+        $uploadBtn.on('click', function (e) {
+            e.preventDefault();
+            $uploadInput.click();
+            $progressbar.removeClass('bg-danger')
+                    .addClass('bg-success').text('0%').width('0%');
+        });
+        $uploadInput.on('change', function () {
+            let files = $(this).get(0).files;
+
+            if (files.length > 0) {
+                let formData = new FormData();
+
+                // add form fields.
+                $('.fields').each(function () {
+                    let val = $(this).val();
+                    if (val) {
+                        formData.append($(this).attr('name'), val);
+                    }
+                });
+
+                // loop through all the selected files and add them to the formData object
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+
+                    // add the files to formData object for the data payload
+                    formData.append('uploads[]', file, file.name);
+                }
+
+                $.ajax({
+                    url: '#{PROJECT_NAME}' + '/api/upload',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log('upload successful!\n' + data);
+                    },
+                    fail: function () {
+                        $progressbar.removeClass(progressClass)
+                                .addClass('bg-danger').text('上传失败').width('100%');
+                    },
+                    xhr: function () {
+                        // create an XMLHttpRequest
+                        let xhr = new XMLHttpRequest();
+
+                        // listen to the 'progress' event
+                        xhr.upload.addEventListener('progress', function (evt) {
+
+                            if (evt.lengthComputable) {
+                                // calculate the percentage of upload completed
+                                let percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+
+                                $progressbar.addClass(progressClass).text(percentComplete + '%').width(percentComplete + '%');
+                                if (percentComplete === 100) {
+                                    $progressbar.removeClass(progressClass).text('上传成功');
+                                }
+                            }
+                        }, false);
+                        return xhr;
+                    }
+                });
+            }
+        });

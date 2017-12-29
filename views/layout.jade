@@ -1,0 +1,21 @@
+doctype html
+html
+    head
+        title #{title}
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        link(rel="icon" href="#{STATIC_PREFIX}/fs-images/favicon.ico")
+        link(rel='stylesheet', href='#{STATIC_PREFIX}/fs-stylesheets/bootstrap.min.css')
+        link(rel='stylesheet', href='#{STATIC_PREFIX}/fs-stylesheets/style.css')
+    body
+        .container
+            ul.nav.justify-content-end
+                li.nav-item
+                    a.nav-link.disabled(href='#') 您好，#{session.user.userId}
+                li.nav-item
+                    a.nav-link(href=PROJECT_NAME + '/logout') 退出
+            block content
+        script(src='#{STATIC_PREFIX}/fs-javascripts/jquery-3.2.1.min.js')
+        script(src='#{STATIC_PREFIX}/fs-javascripts/popper.min.js')
+        script(src='#{STATIC_PREFIX}/fs-javascripts/bootstrap.min.js')
+        block scripts

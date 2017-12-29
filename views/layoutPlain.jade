@@ -1,0 +1,13 @@
+doctype html
+html
+    head
+        title #{title}
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        link(rel="icon" href="#{STATIC_PREFIX}/fs-images/favicon.ico")
+        link(rel='stylesheet', href='#{STATIC_PREFIX}/fs-stylesheets/bootstrap.min.css')
+        link(rel='stylesheet', href='#{STATIC_PREFIX}/fs-stylesheets/style.css')
+    body
+        block content
+        script(src='#{STATIC_PREFIX}/fs-javascripts/jquery-3.2.1.min.js')
+        block scripts

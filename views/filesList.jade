@@ -1,0 +1,56 @@
+extends layout
+
+block content
+    .card
+        .card-header 插件列表
+        .card-body
+            .tag-list
+                a.badge.badge-success(href='#0') 全部
+                a.badge.badge-info(href='#AndLink') AndLink
+                a.badge.badge-info(href='#AppCore') AppCore
+            .file-list
+                each file in fileList
+                    .row.mt-3.pt-3(class=[file.tag])
+                        .col-5
+                            .content-cell
+                                .filename= file.filename
+                                .checksum.text-secondary= 'MD5 Checksum：' + file.checksum
+                        .col-5.pr-0
+                            .content-cell
+                                .desc= file.desc
+                        .col-1.pl-0
+                            .content-cell
+                                .tag.badge.badge-info= file.tag
+                        .col-1.pl-0
+                            .content-cell
+                                .download
+                                    a(href=PROJECT_NAME + '/file/download/' + file.location title='下载文件') 下载
+        if session.user.token === 'master88'
+            .card-footer
+                ul.nav
+                    li.nav-item
+                        a.nav-link(href=PROJECT_NAME + '/file/upload') 上传文件
+block scripts
+    script(type='text/javascript').
+        $('.tag-list').on('click', 'a', function (e) {
+            e.preventDefault();
+
+            var $this = $(this),
+                tag = $this.attr('href').replace('#', ''),
+                $row = $('.row'),
+                defaultClass = 'badge-info';
+                activeClass = 'badge-success';
+
+            if($this.hasClass(activeClass)){
+                return;
+            }
+            // active badge
+            $this.removeClass(defaultClass).addClass(activeClass)
+                .siblings()
+                .removeClass(activeClass).addClass(defaultClass);
+            // show file list
+            $row.show();
+            if(tag != 0){
+                $row.not('.' + tag).hide();
+            }
+        });

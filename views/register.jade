@@ -1,0 +1,24 @@
+extends layoutPlain
+
+block content
+    .register
+        .card
+            .card-body
+                h5.card-title.text-center.text-muted 用户注册
+                if message
+                    .alert.alert-danger
+                        = message
+                form(method='post', action='register')
+                    .form-group
+                        input.form-control(type='text', name='username', placeholder='用户名')
+                    .form-group
+                        input.form-control(type='password', name='password', placeholder='密码')
+                    .form-group
+                        input.form-control(type='password', name='repeatPassword', placeholder='确认密码')
+                    .form-group
+                        input.form-control(type='text', name='token', placeholder='令牌')
+                    .form-group
+                        input.btn.btn-success.btn-block(type='submit', value='注册')
+                    div.text-right
+                        a.card-link(href=PROJECT_NAME + '/login') 登录
+block scripts
