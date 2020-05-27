@@ -16,8 +16,8 @@
 
 ## nginx
 
-> nginx for windows: http://nginx.org/en/docs/windows.html
-> download nginx for windows: http://nginx.org/en/download.html
+> nginx for windows: http://nginx.org/en/docs/windows.html  
+> download nginx for windows: http://nginx.org/en/download.html  
 
 ```bash
 ~# cd c:\
